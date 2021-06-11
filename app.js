@@ -3,6 +3,7 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const app = express();
 const mongoose = require("mongoose");
+require("dotenv").config();
 
 const productRoutes = require("./api/routes/products.js");
 const orderRoutes = require("./api/routes/orders");
@@ -19,7 +20,7 @@ const orderRoutes = require("./api/routes/orders");
 
 mongoose
   .connect(
-    "mongodb+srv://amit:amit@ak.htcxw.mongodb.net/db?retryWrites=true&w=majority",
+    `mongodb+srv://amit:amit@ak.htcxw.mongodb.net/db?retryWrites=true&w=majority`,
     { useNewUrlParser: true, useUnifiedTopology: true }
   )
   .then(() => console.log("Connected to db"));

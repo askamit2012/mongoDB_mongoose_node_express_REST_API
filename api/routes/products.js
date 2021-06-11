@@ -9,7 +9,11 @@ router.get("/", (req, res) => {
     .exec()
     .then((doc) => {
       console.log(doc);
+      //   if (doc.length > 0) {
       res.status(200).json(doc);
+      //   } else {
+      // res.status(404).json({ message: "No entries found" });
+      //   }
     })
     .catch((err) => {
       console.log(err);
@@ -64,9 +68,21 @@ router.get("/:productId", (req, res, next) => {
 
 router.patch("/:productId", (req, res, next) => {
   const id = req.params.productId;
-  res.status(200).json({
-    message: `Product with ${id} updated`,
-  });
+  const updateOps = {};
+  for (const ops of req.body) {
+    updateOps[ops.propName] = ops.value;
+  }
+
+  Product.updateOne({ _id: id }, { $set: updateOps })
+    .exec()
+    .then((result) => {
+      console.log(result);
+      res.status(200).json(result);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ error: err });
+    });
 });
 
 router.delete("/:productId", (req, res, next) => {
