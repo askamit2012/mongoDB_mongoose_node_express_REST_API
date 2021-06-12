@@ -3,10 +3,11 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const app = express();
 const mongoose = require("mongoose");
-require("dotenv").config();
+// require("dotenv").config();
 
 const productRoutes = require("./api/routes/products.js");
 const orderRoutes = require("./api/routes/orders");
+const userRoutes = require("./api/routes/user");
 
 // mongoose
 //   .connect(
@@ -25,7 +26,10 @@ mongoose
   )
   .then(() => console.log("Connected to db"));
 
+mongoose.Promise = global.Promise;
+
 app.use(morgan("dev"));
+app.use("/uploads", express.static("uploads"));
 app.use(
   express.urlencoded({
     extended: false,
@@ -48,6 +52,7 @@ app.use((req, res, next) => {
 
 app.use("/products", productRoutes);
 app.use("/orders", orderRoutes);
+app.use("/users", userRoutes);
 
 app.use((req, res, next) => {
   const error = new Error("Not Found");
